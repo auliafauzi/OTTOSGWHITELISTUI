@@ -9,7 +9,8 @@
 		<transition name="fade">
 			<div class="splash-screen" v-if="splashScreen">
 				<div class="wrap">
-					<img src="/logo.png" class="logo" alt="logo">
+					<!-- <img src="/logo.png" class="logo" alt="logo"> -->
+					<!-- <img src="./assets/images/logo_new.png" class="logo" alt="logo"> -->
 					<img src="/Ripple-2s-200px.gif" alt="loading-image">
 				</div>
 			</div>
@@ -70,8 +71,8 @@ const browser = detect()
 import HorizontalNav from '@/core/horizontal-nav.vue'
 import VerticalNav from '@/core/vertical-nav.vue'
 import Toolbar from '@/core/toolbar.vue'
-import Footer from '@/core/footer.vue'
-import LayoutPicker from '@/components/layout-picker.vue'
+// import Footer from '@/core/footer.vue'
+// import LayoutPicker from '@/components/layout-picker.vue'
 
 export default {
 	name: 'App',
@@ -126,8 +127,8 @@ export default {
 		HorizontalNav,
 		VerticalNav,
 		Toolbar,
-		Footer,
-		LayoutPicker
+		// Footer,
+		// LayoutPicker
 	},
 	created() {
 		if(browser.name)

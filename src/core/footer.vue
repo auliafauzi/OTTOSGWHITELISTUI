@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<div class="footer flex align-center justify-space-between" :class="{'above':position === 'above'}">
 		<div><a href="https://pragmatic.ddmweb.it/docs/#/" target="_blank"><span class="hidden-xs-only">Documentation</span><span class="hidden-sm-and-up">Docs.</span></a></div>
 		<div>
@@ -58,4 +58,4 @@ export default {
 		border-radius: 0;
 	}
 }
-</style>
+</style> -->

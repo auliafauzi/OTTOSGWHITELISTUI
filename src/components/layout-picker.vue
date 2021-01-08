@@ -1,10 +1,10 @@
 <template>
 	<div class="layout-picker" :class="{'open':pickerOpened, 'pos-left': position === 'right'}">
-		<div class="icon-box" @click="pickerOpened = !pickerOpened">		
+		<div class="icon-box" @click="pickerOpened = !pickerOpened">
 			<i class="mdi mdi-cog"></i>
 		</div>
 		<div class="picker-box">
-			<div class="close-btn" @click="pickerOpened = !pickerOpened">		
+			<div class="close-btn" @click="pickerOpened = !pickerOpened">
 				<i class="mdi mdi-close"></i>
 			</div>
 
@@ -135,14 +135,19 @@ export default {
 				this.$store.commit('setLayout', {toolbar:val})
 			}
 		},
+
 		footer: {
 			get() {
-				return this.$store.getters.footer
+				// return this.$store.getters.footer
+				return this.footer = false
 			},
 			set(val) {
-				this.$store.commit('setLayout', {footer:val})
+				// this.$store.commit('setLayout', {footer:val})
+				this.$store.commit('setLayout', {footer:false})
 			}
 		},
+		// footer: false,
+
 		boxed: {
 			get() {
 				return this.$store.getters.boxed
@@ -167,9 +172,9 @@ export default {
 				this.$store.commit('setLayout', {viewAnimation:val})
 			}
 		}
-	},	
+	},
 	methods: {
-		
+
 	}
 }
 </script>

@@ -10,26 +10,26 @@
 		:class="{'nav-collapsed':isCollapse}"
 	>
 <!-- <div class="el-menu-item-group__title" style="padding-top: 4px;"><span>Apps</span></div> -->
-	<el-menu-item index="/logout">
+	<!-- <el-menu-item index="/logout">
 		<i class="mdi mdi-account"></i><span slot="title">Login</span>
-	</el-menu-item>
+	</el-menu-item> -->
 
-	<el-menu-item index="/calendar" v-if="roleSuperAdmin">
+	<el-menu-item index="/companyList" v-if="roleSuperAdmin">
 		<i class="mdi mdi-atom-variant"></i><span slot="title">Company</span>
 	</el-menu-item>
-	<el-menu-item index="/contacts">
+	<el-menu-item index="/whiteList">
 		<i class="mdi mdi-ballot-outline"></i><span slot="title">Whitelist Management</span>
 	</el-menu-item>
-	<el-menu-item index="/editors/quill">
+	<el-menu-item index="/uploadBatch">
 		<i class="mdi mdi-attachment"></i><span slot="title">Upload Batch</span>
 	</el-menu-item>
-	<el-menu-item index="/profile" v-if="roleSuperAdmin">
+	<el-menu-item index="/userList" v-if="roleSuperAdmin">
 		<i class="mdi mdi-account"></i><span slot="title">User Management</span>
 	</el-menu-item>
 
 
 
-
+<!--
 		<div class="el-menu-item-group__title" style="padding-top: 4px;"><span>Apps</span></div>
 		<el-submenu index="/dashboards" popper-class="main-navigation-submenu">
 			<template slot="title">
@@ -370,13 +370,13 @@
 			</el-menu-item>
 			<el-menu-item index="/charts/vuetrend">
 				<span slot="title">Vue Trend</span>
-			</el-menu-item>
+			</el-menu-item> -->
 
 			<!--<el-menu-item index="/charts/vued3network">
 				<span slot="title">Vue D3 Network</span>
 			</el-menu-item>-->
 
-			<el-menu-item index="/charts/vuevis">
+			<!-- <el-menu-item index="/charts/vuevis">
 				<span slot="title">Vue Vis</span>
 			</el-menu-item>
 			<el-menu-item index="/charts/vuechartist">
@@ -390,20 +390,20 @@
 			</el-menu-item>
 			<el-menu-item index="/charts/peity">
 				<span slot="title">Peity</span>
-			</el-menu-item>
+			</el-menu-item> -->
 
 			<!--<el-menu-item index="/charts/plotly">
 				<span slot="title">Plotly</span>
 			</el-menu-item>-->
 
-			<el-menu-item index="/charts/echarts">
+			<!-- <el-menu-item index="/charts/echarts">
 				<span slot="title">Echarts</span>
 			</el-menu-item>
-		</el-submenu>
+		</el-submenu> -->
 
 
 
-		<div class="el-menu-item-group__title"><span>Pages</span></div>
+		<!-- <div class="el-menu-item-group__title"><span>Pages</span></div>
 		<el-menu-item index="/profile">
 			<i class="mdi mdi-card-account-details"></i><span slot="title">Profile</span>
 		</el-menu-item>
@@ -429,7 +429,7 @@
 		</el-menu-item>
 		<el-menu-item index="/404">
 			<i class="mdi mdi-alert-octagon"></i><span slot="title">404</span>
-		</el-menu-item>
+		</el-menu-item> -->
 
 	</el-menu>
 </template>
@@ -482,7 +482,7 @@ export default {
 		//console.log('nav component mounted')
 		// this.userRole =
 		// console.log('in Dashboard + ' + getUserDataInSession2('userRole'))
-		if (String(getUserDataInSession2('userRole')) === '"superAdmin"') {
+		if (String(getUserDataInSession2('userRole')) === '"System Administrator"') {
 			this.roleSuperAdmin = true;
 			// console.log("berhasil")
 		}

@@ -2,40 +2,45 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 //apps
-import Dashboard from '../views/apps/Dashboard.vue'
-import CryptoDashboard from '../views/apps/CryptoDashboard.vue'
-import EcommerceDashboard from '../views/apps/ecommerce/Dashboard.vue'
-import Calendar from '../views/apps/Calendar.vue'
-import Contacts from '../views/apps/Contacts.vue'
-import Gallery from '../views/apps/Gallery.vue'
-import Cards from '../views/apps/Cards.vue'
-import Mail from '../views/apps/Mail.vue'
-import Timeline from '../views/apps/Timeline.vue'
-import Ecommerce from './ecommerce'
+// import Dashboard from '../views/apps/Dashboard.vue'
+// import CryptoDashboard from '../views/apps/CryptoDashboard.vue'
+// import EcommerceDashboard from '../views/apps/ecommerce/Dashboard.vue'
+// import Calendar from '../views/apps/Calendar.vue'
+// import Contacts from '../views/apps/Contacts.vue'
+// import Gallery from '../views/apps/Gallery.vue'
+// import Cards from '../views/apps/Cards.vue'
+// import Mail from '../views/apps/Mail.vue'
+// import Timeline from '../views/apps/Timeline.vue'
+// import Ecommerce from './ecommerce'
 
 //pages
 import Login from '../views/pages/authentication/Login.vue'
 import Login2 from '../views/pages/authentication/Login2.vue'
-import Register from '../views/pages/authentication/Register.vue'
-import ForgotPassword from '../views/pages/authentication/ForgotPassword.vue'
-import Profile from '../views/pages/Profile.vue'
+// import Register from '../views/pages/authentication/Register.vue'
+// import ForgotPassword from '../views/pages/authentication/ForgotPassword.vue'
+// import Profile from '../views/pages/Profile.vue'
 import NotFound from '../views/pages/NotFound.vue'
-import Invoice from '../views/pages/Invoice.vue'
+// import Invoice from '../views/pages/Invoice.vue'
+import Company from '../views/pages/CompanyList.vue'
+import UploadBatch from '../views/pages/UploadBatch.vue'
+import UserList from '../views/pages/UserList.vue'
+import WhiteList from '../views/pages/WhiteList.vue'
+
 
 //ui
-import Themes from '../views/ui/Themes.vue'
-import Icons from '../views/ui/Icons/Icons.vue'
-import MdIcons from '../views/ui/Icons/MdIcons.vue'
-import FlagIcons from '../views/ui/Icons/FlagIcons.vue'
-import MultiLanguage from '../views/ui/MultiLanguage.vue'
-import HelperClasses from '../views/ui/HelperClasses.vue'
-import Typography from '../views/ui/Typography.vue'
+// import Themes from '../views/ui/Themes.vue'
+// import Icons from '../views/ui/Icons/Icons.vue'
+// import MdIcons from '../views/ui/Icons/MdIcons.vue'
+// import FlagIcons from '../views/ui/Icons/FlagIcons.vue'
+// import MultiLanguage from '../views/ui/MultiLanguage.vue'
+// import HelperClasses from '../views/ui/HelperClasses.vue'
+// import Typography from '../views/ui/Typography.vue'
 import layout from './layout'
-import editors from './editors'
-import charts from './charts'
-import maps from './maps'
-import tables from './tables'
-import element from './element'
+// import editors from './editors'
+// import charts from './charts'
+// import maps from './maps'
+// import tables from './tables'
+// import element from './element'
 
 import layouts from '../layout'
 import store from '../store'
@@ -51,225 +56,254 @@ const router = new Router({
 			path: '/',
 			redirect:'/login',
 			name: 'login',
-			component: Dashboard,
+			component: Login,
 			meta: {
 				layout: layouts.contenOnly
 			}
 		},
 		{
-			path: '/dashboard',
-			alias: '/dashboard',
-			name: 'dashboard',
-			component: Dashboard,
-			meta: {
-				requiresAuth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['app']
-			}
-		},
-		{
-			path: '/ecommerce-dashboard',
-			name: 'ecommerce-admin-dashboard',
-			component: EcommerceDashboard,
+			path: '/companyList',
+			name: 'company',
+			component: Company,
 			meta: {
 				auth: true,
 				layout: layouts.navLeft,
-				searchable: true,
-				title: 'eCommerce admin dashboard',
-				tags: ['app', 'Ecommerce']
+				searchable: true
 			}
 		},
 		{
-			path: '/crypto-dashboard',
-			alias: '/dashboards',
-			name: 'crypto-dashboard',
-			component: CryptoDashboard,
+			path: '/userList',
+			name: 'UserList',
+			component: UserList,
 			meta: {
 				auth: true,
 				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['app', 'Crypto']
+				searchable: true
+			}
+		},
+		{
+			path: '/whiteList',
+			name: 'WhiteList',
+			component: WhiteList,
+			meta: {
+				auth: true,
+				layout: layouts.navLeft,
+				searchable: true
+			}
+		},
+		{
+			path: '/uploadBatch',
+			name: 'uploadBatch',
+			component: UploadBatch,
+			meta: {
+				auth: true,
+				layout: layouts.navLeft,
+				searchable: true
 			}
 		},
 
-		{
-			path: '/calendar',
-			name: 'calendar',
-			component: Calendar,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['app']
-			}
-		},
-		{
-			path: '/contacts',
-			name: 'contacts',
-			component: Contacts,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['users', 'address', 'book', 'app']
-			}
-		},
-		{
-			path: '/gallery',
-			name: 'gallery',
-			component: Gallery,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['photo', 'app']
-			}
-		},
-		{
-			path: '/cards',
-			name: 'cards',
-			component: Cards,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['app', 'todo']
-			}
-		},
-		{
-			path: '/mail',
-			name: 'mail',
-			component: Mail,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				title: 'Mail',
-				tags: ['app', 'email', 'inbox']
-			}
-		},
-		Ecommerce,
-		{
-			path: '/timeline',
-			name: 'timeline',
-			component: Timeline,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['app']
-			}
-		},
-		{
-			path: '/themes',
-			name: 'themes',
-			component: Themes,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['ui']
-			}
-		},
-		{
-			path: '/icons',
-			name: 'icons',
-			component: Icons,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft
-			},
-			children: [
-				{
-					path: 'md-icons',
-					name: 'md-icons',
-					component: MdIcons,
-					meta: {
-						auth: true,
-						layout: layouts.navLeft,
-						searchable: true,
-						title: 'Material Design Icons',
-						tags: ['material design']
-					}
-				},
-				{
-					path: 'flag-icons',
-					name: 'flag-icons',
-					component: FlagIcons,
-					meta: {
-						auth: true,
-						layout: layouts.navLeft,
-						searchable: true,
-						title: 'Flag Icons',
-						tags: ['list', 'ui']
-					}
-				}
-			]
-		},
-		{
-			path: '/multi-language',
-			name: 'multi-language',
-			component: MultiLanguage,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['ui', 'translate']
-			}
-		},
-		{
-			path: '/helper-classes',
-			name: 'helper-classes',
-			component: HelperClasses,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				title: 'Helper Classes',
-				tags: ['ui']
-			}
-		},
-		{
-			path: '/typography',
-			name: 'typography',
-			component: Typography,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				title: 'Typography',
-				tags: ['ui']
-			}
-		},
+		// {
+		// 	path: '/ecommerce-dashboard',
+		// 	name: 'ecommerce-admin-dashboard',
+		// 	component: EcommerceDashboard,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		title: 'eCommerce admin dashboard',
+		// 		tags: ['app', 'Ecommerce']
+		// 	}
+		// },
+		// {
+		// 	path: '/crypto-dashboard',
+		// 	alias: '/dashboards',
+		// 	name: 'crypto-dashboard',
+		// 	component: CryptoDashboard,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		tags: ['app', 'Crypto']
+		// 	}
+		// },
+		//
+		// {
+		// 	path: '/calendar',
+		// 	name: 'calendar',
+		// 	component: Calendar,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		tags: ['app']
+		// 	}
+		// },
+		// {
+		// 	path: '/contacts',
+		// 	name: 'contacts',
+		// 	component: Contacts,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		tags: ['users', 'address', 'book', 'app']
+		// 	}
+		// },
+		// {
+		// 	path: '/gallery',
+		// 	name: 'gallery',
+		// 	component: Gallery,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		tags: ['photo', 'app']
+		// 	}
+		// },
+		// {
+		// 	path: '/cards',
+		// 	name: 'cards',
+		// 	component: Cards,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		tags: ['app', 'todo']
+		// 	}
+		// },
+		// {
+		// 	path: '/mail',
+		// 	name: 'mail',
+		// 	component: Mail,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		title: 'Mail',
+		// 		tags: ['app', 'email', 'inbox']
+		// 	}
+		// },
+		// Ecommerce,
+		// {
+		// 	path: '/timeline',
+		// 	name: 'timeline',
+		// 	component: Timeline,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		tags: ['app']
+		// 	}
+		// },
+		// {
+		// 	path: '/themes',
+		// 	name: 'themes',
+		// 	component: Themes,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		tags: ['ui']
+		// 	}
+		// },
+		// {
+		// 	path: '/icons',
+		// 	name: 'icons',
+		// 	component: Icons,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft
+		// 	},
+		// 	children: [
+		// 		{
+		// 			path: 'md-icons',
+		// 			name: 'md-icons',
+		// 			component: MdIcons,
+		// 			meta: {
+		// 				auth: true,
+		// 				layout: layouts.navLeft,
+		// 				searchable: true,
+		// 				title: 'Material Design Icons',
+		// 				tags: ['material design']
+		// 			}
+		// 		},
+		// 		{
+		// 			path: 'flag-icons',
+		// 			name: 'flag-icons',
+		// 			component: FlagIcons,
+		// 			meta: {
+		// 				auth: true,
+		// 				layout: layouts.navLeft,
+		// 				searchable: true,
+		// 				title: 'Flag Icons',
+		// 				tags: ['list', 'ui']
+		// 			}
+		// 		}
+		// 	]
+		// },
+		// {
+		// 	path: '/multi-language',
+		// 	name: 'multi-language',
+		// 	component: MultiLanguage,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		tags: ['ui', 'translate']
+		// 	}
+		// },
+		// {
+		// 	path: '/helper-classes',
+		// 	name: 'helper-classes',
+		// 	component: HelperClasses,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		title: 'Helper Classes',
+		// 		tags: ['ui']
+		// 	}
+		// },
+		// {
+		// 	path: '/typography',
+		// 	name: 'typography',
+		// 	component: Typography,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		title: 'Typography',
+		// 		tags: ['ui']
+		// 	}
+		// },
 		layout,
-		editors,
-		charts,
-		maps,
-		tables,
-		element,
-		{
-			path: '/profile',
-			name: 'profile',
-			component: Profile,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['pages']
-			}
-		},
-		{
-			path: '/invoice',
-			name: 'invoice',
-			component: Invoice,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['pages']
-			}
-		},
+		// editors,
+		// charts,
+		// maps,
+		// tables,
+		// element,
+		// {
+		// 	path: '/profile',
+		// 	name: 'profile',
+		// 	component: Profile,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		tags: ['pages']
+		// 	}
+		// },
+		// {
+		// 	path: '/invoice',
+		// 	name: 'invoice',
+		// 	component: Invoice,
+		// 	meta: {
+		// 		auth: true,
+		// 		layout: layouts.navLeft,
+		// 		searchable: true,
+		// 		tags: ['pages']
+		// 	}
+		// },
 		{
 			path: '/login',
 			name: 'loginOld',
@@ -278,35 +312,35 @@ const router = new Router({
 				layout: layouts.contenOnly
 			}
 		},
-		{
-			path: '/login2',
-			name: 'login2',
-			component: Login2,
-			meta: {
-				layout: layouts.contenOnly
-			}
-		},
-		{
-			path: '/register',
-			name: 'register',
-			component: Register,
-			meta: {
-				layout: layouts.contenOnly
-			}
-		},
-		{
-			path: '/forgot-password',
-			name: 'forgot-password',
-			component: ForgotPassword,
-			meta: {
-				layout: layouts.contenOnly
-			}
-		},
+		// {
+		// 	path: '/login2',
+		// 	name: 'login2',
+		// 	component: Login2,
+		// 	meta: {
+		// 		layout: layouts.contenOnly
+		// 	}
+		// },
+		// {
+		// 	path: '/register',
+		// 	name: 'register',
+		// 	component: Register,
+		// 	meta: {
+		// 		layout: layouts.contenOnly
+		// 	}
+		// },
+		// {
+		// 	path: '/forgot-password',
+		// 	name: 'forgot-password',
+		// 	component: ForgotPassword,
+		// 	meta: {
+		// 		layout: layouts.contenOnly
+		// 	}
+		// },
 		{
 			path: '/logout',
 			beforeEnter (to, from, next) {
 				auth.logout()
-				next({path:'/login'})
+				next({path:'/'})
 			}
 		},
 		{
@@ -348,6 +382,7 @@ const auth = {
 		return store.getters.isLogged
 	},
 	logout() {
+		localStorage.clear();
 		store.commit('setLogout')
 	}
 }

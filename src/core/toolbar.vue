@@ -7,10 +7,10 @@
 
 			<img class="logo-mini" src="@/assets/images/logo.png" alt="logo"/>
 
-			<search class="hidden-xs-only"></search>
+			<!-- <search class="hidden-xs-only"></search> -->
 		</div>
 		<div class="box-right flex align-center pl-10">
-			<el-dropdown trigger="click" @command="onCommandLang">
+			<!-- <el-dropdown trigger="click" @command="onCommandLang">
 				<span class="el-dropdown-link">
 					<i class="flag-icon" :class="{['flag-icon-'+lang]:true}"></i>
 				</span>
@@ -24,27 +24,30 @@
 					<el-dropdown-item command="jp"><i class="flag-icon flag-icon-jp mr-15"></i>Japanese</el-dropdown-item>
 					<el-dropdown-item command="/multi-language"><i class="mdi mdi-translate mr-15"></i>Read the docs</el-dropdown-item>
 				</el-dropdown-menu>
-			</el-dropdown>
+			</el-dropdown> -->
 			<button class="fullscreen-button" @click="toggleFullscreen">
 				<i class="mdi mdi-fullscreen" v-if="!fullscreen"></i>
 				<i class="mdi mdi-fullscreen-exit" v-if="fullscreen"></i>
 			</button>
-			<el-popover ref="popover" placement="bottom" :width="popoverWidth" trigger="click">
+			<!-- <el-popover ref="popover" placement="bottom" :width="popoverWidth" trigger="click">
 				<notification-box></notification-box>
 			</el-popover>
 			<el-badge :is-dot="true" class="notification-icon-badge">
 				<el-button v-popover:popover icon="mdi mdi-bell" class="notification-icon"></el-button>
-			</el-badge>
-			<span class="username"><router-link to="/profile">Aurora Shenton</router-link></span>
-			<el-dropdown trigger="click" @command="onCommand">
+			</el-badge> -->
+			<span class="username">{{userName}}</span>
+			<!-- <span class="username"><router-link to="/profile">Admin</router-link></span> -->
+			<el-dropdown trigger="click" @command="onCommandLang">
 				<span class="el-dropdown-link">
-					<img src="../assets/images/avatar.jpg" class="avatar" alt="avatar">
+					<img src="../assets/images/avatar-3.jpg" class="avatar" alt="avatar">
+					<!-- <p></p> -->
+					<!-- <i class="mdi mdi-account-circle" size="lg"></i> -->
 				</span>
 				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item command="/profile"><i class="mdi mdi-account mr-10"></i> Profile</el-dropdown-item>
-					<el-dropdown-item command="/calendar"><i class="mdi mdi-calendar mr-10"></i> Calendar</el-dropdown-item>
-					<el-dropdown-item command="/contacts"><i class="mdi mdi-account-multiple mr-10"></i> Contacts</el-dropdown-item>
-					<el-dropdown-item command="/logout" divided><i class="mdi mdi-logout mr-10"></i> Logout</el-dropdown-item>
+					<!-- <el-dropdown-item command="/profile"><i class="mdi mdi-account mr-10"></i> Profile</el-dropdown-item> -->
+					<!-- <el-dropdown-item command="/calendar"><i class="mdi mdi-calendar mr-10"></i> Calendar</el-dropdown-item>
+					<el-dropdown-item command="/contacts"><i class="mdi mdi-account-multiple mr-10"></i> Contacts</el-dropdown-item> -->
+					<el-dropdown-item command="/logout"><i class="mdi mdi-logout mr-10"></i> Logout</el-dropdown-item>
 				</el-dropdown-menu>
 			</el-dropdown>
 
@@ -56,8 +59,9 @@
 </template>
 
 <script>
-import NotificationBox from '@/components/NotificationBox'
-import Search from '@/components/Search'
+import NotificationBox from '@/components/NotificationBox';
+import Search from '@/components/Search';
+// import getUserDataInSession2 from '../utils';
 
 export default {
 	name: 'Toolbar',
@@ -66,7 +70,8 @@ export default {
 		return {
 			popoverWidth: 300,
 			fullscreen: false,
-			lang: 'us'
+			lang: 'us',
+			userName : ''
 		}
 	},
 	methods: {
@@ -104,6 +109,12 @@ export default {
 		this.fullscreen = this.$fullscreen.getState()
 		this.resizePopoverWidth();
 		window.addEventListener('resize', this.resizePopoverWidth);
+		if (localStorage.getItem('userRole') === '"System Administrator"') {
+			this.userName = 'System Administrator';
+		}
+		else {
+			this.userName = getItem('userRole');
+		}
 	},
 	beforeDestroy() {
 		window.removeEventListener('resize', this.resizePopoverWidth);

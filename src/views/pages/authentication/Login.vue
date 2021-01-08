@@ -1,7 +1,19 @@
 <template>
 	<vue-scroll class="login-page align-vertical">
 		<div class="form-wrapper align-vertical-middle">
+
+
+
 			<div class="form-box card-base card-shadow--extraLarge">
+
+				<template v-if="errorAlert">
+		      <b-row>
+		        <b-col sm="12">
+		          <b-alert show variant="danger">{{errorMessage}}</b-alert>
+		        </b-col>
+		      </b-row>
+		    </template>
+
 				<!-- <img class="image-logo" src="@/assets/images/logo.png" alt="logo"/> -->
 				<!-- <div class="app-name">Partner Management</div> -->
 				<img class="image-logo" src="@/assets/images/logo.png" alt="logo"/>
@@ -17,11 +29,15 @@
 				</div>
 
 				<float-label class="styled">
-					<input type="user name" placeholder="User Name">
+					<input type="user name" placeholder="User Name" v-model="userName">
 				</float-label>
 				<float-label class="styled">
-					<input type="password" placeholder="Password">
+					<input type="password" placeholder="Password" v-model="password">
 				</float-label>
+				<!-- <b-form-input type="text"
+								placeholder="Enter password"
+								v-model="password">
+				</b-form-input> -->
 
 				<div class="flex">
 					<div class="box grow"><el-checkbox>Remember Me </el-checkbox></div>
@@ -70,7 +86,7 @@
 
 <script>
 import axios from "axios";
-import { saveUserDataInSession2, getUserDataInSession2 } from '../../../utils';
+import { saveUserDataInSession2, getUserDataInSession2, setToken} from '../../../utils';
 
 export default {
 	name: 'Login',
@@ -80,6 +96,10 @@ export default {
 				email: null,
 				password: null,
 			},
+			userName: '',
+			password: '',
+			errorAlert: false,
+			errorMessage: '',
 			loginError: false,
 	    expiryError: false,
 	    serverError: false,
@@ -107,56 +127,91 @@ export default {
 		// 	this.ErrormodalShow = true
     // },
 		login(logfilename) {
-      axios({
-        method: "post",
-        url: `http://0.0.0.0:3000/api/v1/login`,
-        // headers: {Authorization: `Bearer ${this.state.login.access_token}`},
-        withCredentials: true // True otherwise I receive another error
-      }).then(response => {
-        if (response.status === 200) {
-					// console.log(response.data)
-					if (response.data.auth === 'allowed') {
-						saveUserDataInSession2('userRole',response.data.role)
-						this.localValue = getUserDataInSession2('userRole')
-						// console.log(this.localValue)
-						console.log(this.localValue)
-						this.$router.push('/dashboard');
+			if (this.userName === '') {
+				console.log("username is empty");
+				this.errorMessage = 'Username is empty';
+				this.errorAlert = true;
+				setTimeout(() => {console.log("sleeping"),this.errorAlert = false, this.errorMessage = ''}, 3000);
+			}
+			else if (this.password === '') {
+				console.log("password is empty");
+				this.errorMessage = 'Password is empty';
+				this.errorAlert = true;
+				setTimeout(() => {console.log("sleeping"),this.errorAlert = false, this.errorMessage = ''}, 3000);
+			}
+			else {
+	      // axios({
+	      //   method: "post",
+	      //   url: `http://0.0.0.0:3000/api/v1/login`,
+				// 	// url: `https://antares.pede.id/sg-web-service/v1/login`,
+	      //   // headers: {Authorization: `Bearer ${this.state.login.access_token}`},
+	      //   withCredentials: true, // True otherwise I receive another error
+				// 	body: { user: this.userName, password: this.password }
+	      // })
+				// axios.post("http://0.0.0.0:3000/api/v1/login",{
+				var headers = {
+					'Content-Type': 'application/json'
+				}
+				axios.post("https://antares.pede.id/sg-web-service/v1/login",{
+								user: this.userName,
+								password: this.password
+							}, headers
+					).then(response => {
+					console.log("response")
+					console.log(response)
+	        if (response.status === 200) {
+						console.log("keseini")
+						// if (response.data.token !== null && response.data.data.active === true) {
+						if (response.data.data !== null) {
+							if (response.data.data.active === true) {
+								saveUserDataInSession2('UserInfo',response.data.data)
+								saveUserDataInSession2('userRole',response.data.data.role)
+								saveUserDataInSession2('userCompanyId',response.data.data.company.id)
+								saveUserDataInSession2('userCompanyName',response.data.data.company.name)
+								setToken(response.data.data.token);
+								this.localValue = getUserDataInSession2('userRole')
+								this.$router.push('/uploadBatch');
+							} else {
+								this.errorMessage = 'User is no Longer Active, Please Contact Administrator'
+								this.errorAlert = true
+								setTimeout(() => {console.log("sleeping"),this.errorAlert = false, this.errorMessage = ''}, 5000);
+							}
+						} else {
+							this.errorMessage = response.data.message
+							this.errorAlert = true
+							setTimeout(() => {console.log("sleeping"),this.errorAlert = false, this.errorMessage = ''}, 5000);
+						}
 					}
 					else {
-						this.errorText = 'Invalid Username or Password'
-						this.modalShow = true
-					}
-					// this.modalShow = true
-					// showModal()
-					// this.$root.$emit('bv::show::modal','Errormodal-1');
-					// this.ErrormodalShow = true
-					// this.$root.$emit('bv::show::modal', this.ErrorModal);
-					// this.$router.push('dashboard');
-          // this.logdata = response.data;
-          // this.logfilename = logfilename;
-          // this.$root.$emit('bv::show::modal', this.logModal.id)
-				}
-				else {
-					console.log(response.data)
-					this.errorText = response.status
-					this.modalShow = true
-					}
-        }).catch((error) => {
-	        if (error.response !== undefined) {
-	          if (error.response.status === 401) {
-							console.log(error.response)
-	            // this.loginError = true;
-	          } else {
-							console.log(error.response)
-	            // this.serverError = true;
-	          }
-	        } else {
+						// console.log(response.data)
+						this.errorMessage = response.status
+						this.errorAlert = true
+						setTimeout(() => {this.errorAlert = false, this.errorMessage = ''}, 5000);
+						}
+	        }).catch((error) => {
 						console.log(error.response)
-						this.errorText = 'Server is Down'
-						this.modalShow = true
-	          // this.serverError = true;
-	        }
-	      });
+		        if (error.response !== undefined) {
+		          if (error.response.status === 401) {
+								// console.log(error.response)
+		            // this.loginError = true;
+		          }
+							else if (error.response.data.code === 400){
+								this.errorMessage = response.data.message
+								this.errorAlert = true
+								setTimeout(() => {this.errorAlert = false, this.errorMessage = ''}, 5000);
+		          } else {
+								// console.log(error.response)
+		            // this.loginError = true;
+							}
+		        } else {
+							// console.log(error.response)
+							this.errorMessage = 'Server is Down'
+							this.errorAlert = true
+							setTimeout(() => {this.errorAlert = false, this.errorMessage = ''}, 5000);
+		          // this.serverError = true;
+		        }
+		      });
+			}
     },
 	}
 }
