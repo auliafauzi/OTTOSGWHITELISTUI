@@ -44,12 +44,14 @@ import layout from './layout'
 
 import layouts from '../layout'
 import store from '../store'
+import axios from "axios"
+import {getToken} from '../utils';
 
 Vue.use(Router)
 
 
 const router = new Router({
-	mode: 'history',
+	// mode: 'history',
 	//base: '/sub-path/',
 	routes: [
 		{
@@ -382,6 +384,14 @@ const auth = {
 		return store.getters.isLogged
 	},
 	logout() {
+		var headers = {
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer ' + getToken()
+			// 'Authorization': `Bearer ${this.token}`
+			// 'Authorization': getToken()
+		}
+		axios.delete("https://antares.pede.id//sg-web-service/v1/logout", {headers,
+		})
 		localStorage.clear();
 		store.commit('setLogout')
 	}
@@ -404,7 +414,7 @@ router.beforeEach((to, from, next) => {
 			}
 		} else {
 			if(to.name !== 'login'){
-				window.location.href = '/login'
+				window.location.href = '/'
 				return false
 			}
 			next()

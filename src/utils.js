@@ -1,5 +1,7 @@
 import router from './router/index';
 
+export const BASE_URL = 'https://antares.pede.id/sg-web-service/v1';
+
 export const TOKEN_KEY = 'token';
 
 export const USER_DATA_KEY = 'userData';

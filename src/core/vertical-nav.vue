@@ -1,5 +1,5 @@
 <template>
-	<div class="vertical-nav" :class="{'nav-collapsed':collapseNav, 'open':openSidebar}">
+	<div class="vertical-nav" :class="{'nav-not-collapsed':collapseNav==false, 'nav-collapsed':collapseNav, 'open':openSidebar}">
 		<div class="sidebar-mask" :class="{'open':openSidebar}" @click="closeNav"></div>
 
 		<div class="sidebar flex column" :class="{'open':openSidebar, ['pos-'+position]:true}">
@@ -51,12 +51,12 @@ export default {
 @import '../assets/scss/_mixins';
 
 .vertical-nav {
-	//width: 230px;
+	// width: 250px;
 	height: 100%;
 	padding: 10px 20px;
 	box-sizing: border-box;
 	transition: width .5s;
-	
+
 	.sidebar-mask {
 		visibility: hidden;
 		opacity: 0;
@@ -81,14 +81,14 @@ export default {
 		&:not(.pos-right) {
 			.box-nav {
 				.scroll-nav {
-					&.vb { 
+					&.vb {
 						& > .vb-content {
 							margin-left: 4px;
 						}
-						& > .vb-dragger { 
-							//left: 3px; 
-							right: inherit; 
-						} 
+						& > .vb-dragger {
+							//left: 3px;
+							right: inherit;
+						}
 					}
 					.ps__scrollbar-y-rail {
 						left: 0px;
@@ -101,8 +101,11 @@ export default {
 
 	&.nav-collapsed {
 		.sidebar {
-			width: 74px;
+			width: 54px;
 		}
+	}
+	&.nav-not-collapsed {
+		width: 230px;
 	}
 }
 

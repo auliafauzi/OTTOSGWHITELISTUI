@@ -72,7 +72,7 @@ import HorizontalNav from '@/core/horizontal-nav.vue'
 import VerticalNav from '@/core/vertical-nav.vue'
 import Toolbar from '@/core/toolbar.vue'
 // import Footer from '@/core/footer.vue'
-// import LayoutPicker from '@/components/layout-picker.vue'
+import LayoutPicker from '@/components/layout-picker.vue'
 
 export default {
 	name: 'App',
@@ -159,7 +159,7 @@ export default {
 		overflow: hidden;
 
 		.header {
-			height: 60px;
+			height: 40px;
 			margin-bottom: 20px;
 			margin-top: 10px;
 			margin-left: 30px;
@@ -169,7 +169,7 @@ export default {
 		.main {
 			position: relative;
 			overflow: hidden;
-			padding: 0 30px;
+			padding: 0 5px;
 		}
 
 		.view {

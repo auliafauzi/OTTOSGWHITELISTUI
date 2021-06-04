@@ -23,18 +23,18 @@
 
      <div>
        <p/>
-         <div id="RestoreBox"
+         <div id="UploadBox"
                  ref="modal"
-                 ok-title="Submit" @ok="restore"
-                 title="Upload the backup file">
-                 <template v-if="errorRestore">
+                 ok-title="Submit" @ok="uploadFile"
+                 title="Upload file">
+                 <template v-if="errorUploadFile">
                    <b-row>
                      <b-col sm="12">
-                       <b-alert show variant="warning">{{errorMessage}}</b-alert>
+                       <b-alert show variant="danger">{{errorMessage}}</b-alert>
                      </b-col>
                    </b-row>
                  </template>
-                 <template v-if="successRestore">
+                 <template v-if="successUploadFile">
                    <b-row>
                      <b-col sm="12">
                        <b-alert show variant="success">{{successMessage}}</b-alert>
@@ -43,13 +43,16 @@
                  </template>
                    <div class="container">
                      <div class="large-12 medium-12 small-12 cell">
+                       <div>Company: <strong></strong></div>
+                       <div class="mt-3" v-if="SuperAdmin===false" >{{CompanyName}}<strong></strong></div>
+                       <b-form-select v-if="SuperAdmin" v-model="Company" :options="CompanyOptions"></b-form-select>
                       <p></p>
-                       <label>File
-                         <input type="file" id="file" accept=".csv,.gz,.zip" ref="file" v-on:change="handleFileUpload()"/>
+                       <label v-if="Company !== ''">
+                         <input type="file" id="file" accept=".csv" ref="file" v-on:change="handleFileUpload()"/>
                        </label>
                      </div>
                    </div>
-                   <b-btn @click="restore" size="m" variant="primary">
+                   <b-btn v-if="Company !== ''" @click="uploadFile" size="m" variant="primary">
                      <i class="fa fa-dot-circle-o"></i>
                       Submit
                     </b-btn>
@@ -61,11 +64,11 @@
 
 <script>
 // import { ModelSelect } from 'vue-search-select';
-// import { getToken, setAlert } from '../../utils';
+import { getToken,getUserDataInSession2, BASE_URL } from '../../utils';
 import axios from "axios";
 
 export default {
-  name: 'BackupRestore',
+  name: 'UploadBatch',
   // components: {
   //   ModelSelect,
   // },
@@ -80,146 +83,156 @@ export default {
       file: '',
       warning: false,
       warning2: false,
-      successRestore: false,
-      errorRestore: false,
+      successUploadFile: false,
+      errorUploadFile: false,
+      SuperAdmin : false,
+      Company : '',
+      CompanyName : '',
+      CompanyOptions : [
+        { value: null, text: 'Please Select Company ', disabled: true  },
+      ],
+      keyValueOption : {},
+      HomeLocation : '/ottosg_webportal'
+
     }
   ),
-
-
+  mounted() {
+    this.getData();
+    if (localStorage.getItem('userRole') === '"System Administrator"') {
+			this.SuperAdmin = true;
+      // this.getData();
+		}
+		else {
+      if (getUserDataInSession2('userCompanyName') !== null) {
+        this.CompanyName = getUserDataInSession2('userCompanyName').replace(/\"/gi, '')
+      }
+      this.Company = getUserDataInSession2('userCompanyId')
+		};
+  },
   methods: {
-    // download() {
-    //   this.axios({
-    //     url: '/dashboard/backup/download',
-    //     method: 'GET',
-    //     // headers: { 'x-access-token': getToken() },
-    //     responseType: 'blob',
-    //   }).then((response) => {
-    //     const url = window.URL.createObjectURL(new Blob([response.data]));
-    //     const link = document.createElement('a');
-    //     link.href = url;
-    //     link.setAttribute('download', 'nfg-backup.zip');
-    //     document.body.appendChild(link);
-    //     link.click();
-    //     if (response.data.result === true || response.status === 200) {
-    //       // setAlert(this, response);
-    //       this.success = true;
-    //       this.successMessage = 'Backup Has Been Completed';
-    //       setTimeout(() => { this.success = false; this.successMessage = ''; }, 5500);
-    //     } else if (response.data.result === false) {
-    //       setAlert(this, response);
-    //     } else {
-    //       setAlert(this, response);
-    //       this.errorMessage = 'Internal Server Error [Please check your root password]';
-    //     }
-    //   }).catch((error) => {
-    //     if (error.response !== undefined) {
-    //       this.success = false;
-    //       setAlert(this, error.response);
-    //     }
-    //   });
-    // },
-    restore(evt) {
+    getData() {
+      this.token = getToken()
+      var headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.token}`
+      }
+      axios.get(`${BASE_URL}/companies`,{
+            headers
+            },
+        ).then(response => {
+          if (response.status === 200 && response.data.code === 200) {
+            this.dataCompany = response.data.data;
+            this.optionsFunc(this.dataCompany,this.CompanyOptions)
+          } else if (response.status === 200 && response.data.code === 401) {
+            this.error = true;
+            this.errorMessage = response.data.message;
+            setTimeout(() => {this.errorMessage = '', console.log(response.data.message),window.location.href = this.HomeLocation}, 2000);
+          } else {
+            // this.errorMessage = response.data.message
+            // this.error = true
+          }
+        });
+    },
+    uploadFile(evt) {
       if (this.file === '' || this.file === undefined) {
         evt.preventDefault();
-        // this.$refs.modalRestore.show();
-        this.errorMessage = 'Please select the file to upload';
-        this.errorRestore = true;
-        setTimeout(() => {console.log("sleeping"),this.errorRestore = false, this.file = ''}, 5000);
-      }
-      // else if (this.password === '') {
-      //   evt.preventDefault();
-      //   this.errorMessage = 'Please enter the root password';
-      //   this.errorRestore = true;
-      // }
-      else {
-        this.errorRestore = false;
+        // this.$refs.modalUploadFile.show();
+        this.errorMessage = 'Mohon pilih file yang akan diupload';
+        this.errorUploadFile = true;
+        setTimeout(() => {this.errorUploadFile = false, this.file = ''}, 5000);
+      } else if (this.Company === '') {
+        evt.preventDefault();
+        // this.$refs.modalUploadFile.show();
+        this.errorMessage = 'Pilih Nama Company';
+        this.errorUploadFile = true;
+        setTimeout(() => {this.errorUploadFile = false, this.file = ''}, 5000);
+      } else {
+        this.errorUploadFile = false;
         this.submitFile();
-        // this.handleRestore();
-        // this.$refs.modalRestore.hide();
+        // this.handleUploadFile();
+        // this.$refs.modalUploadFile.hide();
       }
     },
-    handleRestore() {
+    handleUploadFile() {
       this.submitFile();
     },
-    submitFile2() {
-      const formData = new FormData();
-      formData.append('file', this.file);
-      console.log(formData)
-      // const posting = {
-      //   root_password: this.password,
-      //   formData,
-      // };
-      this.root_password = this.password;
-
-      axios({
-        method: "post",
-        url: `http://0.0.0.0:3000/api/v1/uploadBatch/`,
-        formData,
-        headers: { 'Content-Type': 'multipart/form-data' },
-        // headers: {Authorization: `Bearer ${this.state.login.access_token}`},
-        withCredentials: true
-      })
-    },
-    async timesleep(seconds){
-      console.log("timesleep is running")
-      await sleep(seconds)
-    },
     submitFile() {
+      this.token = getToken()
       const formData = new FormData();
       formData.append('file', this.file);
-      // const posting = {
-      //   root_password: this.password,
-      //   formData,
-      // };
-      this.root_password = this.password;
-      axios.post(`http://0.0.0.0:3000/api/v1/uploadBatch/`,
-      // this.axios.post(`dashboard/restore/${this.root_password}`,
+      formData.append('company-id', this.Company);
+      // for (var pair of formData.entries()) {
+      //   console.log(pair[0]+ ', ' + pair[1]);
+      // }
+      var headers = {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${this.token}`
+      };
+      axios.post(`${BASE_URL}/employees`,
+      // axios.post(`http://0.0.0.0:3000/api/sg-web-service/v1/employees`,
       // formData, { headers: { 'Content-Type': 'multipart/form-data', 'x-access-token': getToken() } }).then((response) => {
-      formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then((response) => {
-        console.log(response.data.result)
-        if (response.data.result === true) {
-          console.log("result is true")
-          // setAlert(this, response);
-          this.successMessage = 'File Upload Has Been Completed ';
-          this.successRestore = true;
-          setTimeout(() => {console.log("sleeping"),this.successRestore = false, this.file = ''}, 5000);
-        } else if (response.data.result === false) {
-          setAlert(this, response);
+      formData,{ headers}).then((response) => {
+        // console.log(response.data.result)
+        if (response.status === 200) {
+          if (response.data.status === "Success") {
+            // this.$refs.file.files[0] = ''
+            // this.clearFiles()
+            // this.successMessage = 'File Upload Has Been Completed ';
+            this.successMessage = response.data.status + response.data.message
+            this.successUploadFile = true;
+            setTimeout(() => {this.successUploadFile = false, this.file = '', location.reload()}, 3000);
+          } else if (response.data.code === 400) {
+            this.errorMessage = response.data.message
+            this.errorUploadFile = true;
+            setTimeout(() => {this.errorUploadFile = false, this.file = '', location.reload()}, 2000);
+          } else if (response.data.code === 401) {
+            this.error = true;
+            this.errorMessage = response.data.message;
+            setTimeout(() => {this.error = false, window.location.href = this.HomeLocation}, 2000);
+          } else if (response.data.status === false) {
+            this.errorMessage = response.data.status  + response.data.message
+            this.errorUploadFile = true;
+            setTimeout(() => {this.errorUploadFile = false, this.file = ''}, 5000);
+          } else if (response.data.status === 'BadRequest') {
+            this.errorMessage = response.data.status + ' - ' + response.data.message
+            this.errorUploadFile = true;
+            setTimeout(() => {this.errorUploadFile = false, this.file = ''}, 5000);
+          } else {
+            this.errorMessage = 'Internal Server Error';
+            this.errorUploadFile = true;
+            setTimeout(() => {this.errorUploadFile = false, this.file = ''}, 5000);
+          }
         } else {
-          setAlert(this, response);
           this.errorMessage = 'Internal Server Error';
+          this.errorUploadFile = true;
+          setTimeout(() => {this.errorUploadFile = false, this.file = ''}, 5000);
         }
       }).catch((error) => {
         if (error.response !== undefined) {
           this.success = false;
-          setAlert(this, error.response);
+          // setAlert(this, error.response);
         }
       });
     },
 
     handleFileUpload() {
       this.file = this.$refs.file.files[0];
+      // console.log("this.file: " + this.file)
+      // console.log("this.$refs.file.files[0]: " + this.$refs.file.files[0])
     },
-//
-//  backup methods
-    clearName() {
-      this.password = '';
-    },
-    handleOk(evt) {
-      // Prevent modal from closing
-      if (!this.password) {
-        evt.preventDefault();
-        this.warningMessage = 'Please enter the root password';
-        this.warning = true;
-        // alert('Please enter the root password');
-      } else {
-        this.warning = false;
-        this.handleSubmit();
+    // clearFiles() {
+    //   console.log("satu")
+    //   // this.$refs.file.files.reset()
+    //   console.log("dua")
+    // },
+    optionsFunc(data, target){
+      for (let i= 0; i < data.length; i++) {
+        this.keyValueOption["value"] = data[i]["id"]
+        this.keyValueOption["text"] = data[i]["name"]
+        target.push(this.keyValueOption) //append keyvalue obj to options array
+        this.keyValueOption = {} //reset keyvalue Object
       }
-    },
-    handleSubmit() {
-      this.backup();
-      // this.$refs.modalBackup.hide();
+      // console.log(target)
     },
   },
 };

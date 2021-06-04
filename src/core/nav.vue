@@ -1,6 +1,5 @@
 <template>
 	<el-menu
-		:default-active.sync="activeLink"
 		:mode="mode"
 		@select="goto"
 		:collapse="isCollapse"
@@ -9,6 +8,17 @@
 		class="main-navigation-menu"
 		:class="{'nav-collapsed':isCollapse}"
 	>
+	<!-- <el-menu
+		:default-active.sync="activeLink"
+		:mode="mode"
+		@select="goto"
+		:collapse="isCollapse"
+		:unique-opened="true"
+		background-color="transparent"
+		class="main-navigation-menu"
+		:class="{'nav-collapsed':isCollapse}"
+	> -->
+
 <!-- <div class="el-menu-item-group__title" style="padding-top: 4px;"><span>Apps</span></div> -->
 	<!-- <el-menu-item index="/logout">
 		<i class="mdi mdi-account"></i><span slot="title">Login</span>

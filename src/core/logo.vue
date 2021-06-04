@@ -3,7 +3,8 @@
 		<!-- <div class="letter-logo">P</div> -->
 		<!-- <img class="image-logo" src="@/assets/images/logo.svg" alt="logo"/> -->
 		<img class="image-logo" src="@/assets/images/logo.png" alt="logo"/>
-		<div class="app-name" @click="goto('/')">Partner Management</div>
+		<!-- <div class="app-name" @click="goto('/')">Portal OttoSG</div> -->
+		<div class="app-name">Portal OttoSG</div>
 		<button class="collapse-nav" @click="collapseNavToggle">
 			<i class="mdi mdi-menu"></i>
 		</button>
